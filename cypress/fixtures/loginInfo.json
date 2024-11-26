@@ -1,0 +1,20 @@
+{
+  "valid": {
+    "username": "Admin",
+    "password": "admin123"
+  },
+
+  "invalid": {
+    "username": "test_user",
+    "password": "testUser123"
+  },
+
+  "errMsg": {
+    "required": "Required",
+    "invalidLogin": "Invalid credentials"
+  },
+
+  "verifyLoginSuccess": "Dashboard",
+
+  "verifyLogoutSuccess": "Login"
+}
