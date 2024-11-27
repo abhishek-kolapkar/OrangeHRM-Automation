@@ -1,0 +1,19 @@
+{
+  "validPass": "admin123",
+
+  "newValidPass": "testAdmin123",
+  "invalidLenPass": "testa",
+  "passWithoutNum": "testadmin",
+  "passWithoutChar": "7896541",
+
+  "invalidConfirmPass": "test123",
+
+  "errMsg": {
+    "required": "Required",
+    "invalidLogin": "Invalid credentials",
+    "passwordLen": "Should have at least 7 characters",
+    "passCriteriaforNum": "Your password must contain minimum 1 number",
+    "passCriteriaforChar": "Your password must contain minimum 1 lower-case letter",
+    "confirmPass": "Passwords do not match"
+  }
+}
