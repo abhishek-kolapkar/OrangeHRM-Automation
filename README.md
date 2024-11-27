@@ -9,6 +9,8 @@ This repository contains automated tests for the OrangeHRM application using Cyp
 - [Installation](#installation)
 - [Folder Structure](#folder-structure)
 - [Running Tests](#running-tests)
+- [Custom Commands](#custom-commands)
+- [Tests Covered For](#tests-covered-for)
 
 ## Introduction
 
@@ -81,4 +83,17 @@ For headless execution, you can run:
 
 ```bash
   npx cypress run
+```
+
+## Custom Commands
+
+Custom commands are defined in the `cypress/support/commands.js` file. They help to streamline repetitive tasks within tests.
+
+## Tests Covered For
+
+```
+modules/
+  » Login
+  » Reset Password
+  » Search & Menu URL of side panel
 ```
