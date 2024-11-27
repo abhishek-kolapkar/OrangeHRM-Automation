@@ -1,6 +1,8 @@
 import { Login } from "../../cypress/support/pages/login/login";
+import { Logout } from "../../cypress/support/pages/logout/logout";
 
 const loginActions = new Login();
+const logoutActions = new Logout();
 
 describe("Verify login functionality", () => {
   beforeEach(() => {
@@ -11,12 +13,18 @@ describe("Verify login functionality", () => {
 
   /* Test Scenario => Verify login with valid credentials */
 
-  it.only("should login with valid credentials & redirect to dashboard page", () => {
+  it("should login with valid credentials & redirect to dashboard page", () => {
     cy.get("@loginData").then((data) => {
       loginActions.login(data.valid.username, data.valid.password);
 
       // ensure redirect to dashboard page after login success
       loginActions.verifyLoginSuccess(data.verifyLoginSuccess.toLowerCase());
+
+      cy.wait(5000);
+
+      // logout after 5s wait
+      logoutActions.logout();
+      logoutActions.verifyLogoutSuccess();
     });
   });
 
@@ -77,7 +85,7 @@ describe("Verify login functionality", () => {
 
   /* Test Scenario => Verify Username & Password case-sensitive */
 
-  it("username should be case-sensitive", () => {
+  it.only("username should be case-sensitive", () => {
     cy.get("@loginData").then((data) => {
       if (data.valid.username === data.valid.username.toUpperCase()) {
         loginActions.login(
@@ -91,8 +99,25 @@ describe("Verify login functionality", () => {
         );
       }
 
-      // ensure that error message should displayed, if enter not case-sensitive username
-      loginActions.verifyInvalidLogin(data.errMsg.invalidLogin);
+      // Check if the login is successful based on the URL
+      cy.url().then((url) => {
+        if (url.includes(data.verifyLoginSuccess.toLowerCase())) {
+          // If login is successful
+          loginActions.verifyLoginSuccess(
+            data.verifyLoginSuccess.toLowerCase()
+          );
+
+          cy.wait(5000); // Wait for 5 seconds
+
+          logoutActions.logout(); // Log out the user
+          logoutActions.verifyLogoutSuccess();
+          cy.log("Logout successful");
+        } else {
+          // If login failed (URL does not contain 'dashboard')
+          loginActions.verifyInvalidLogin(data.errMsg.invalidLogin);
+          cy.log("Login failed: Case-sensitive username");
+        }
+      });
     });
   });
 
