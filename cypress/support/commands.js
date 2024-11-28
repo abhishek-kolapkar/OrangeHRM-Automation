@@ -1,9 +1,9 @@
 // -- This is a parent command --
-Cypress.Commands.add("login", (username = "Admin", password = "admin123") => {
+Cypress.Commands.add("login", (username = "", password = "") => {
   cy.visit("/");
 
-  cy.get("input[name='username']").clear().type(username);
-  cy.get("input[name='password']").clear().type(password);
+  cy.get("input[name='username']").type(username || "Admin");
+  cy.get("input[name='password']").type(password || "admin123");
 
   cy.get(".orangehrm-login-button").click();
 
