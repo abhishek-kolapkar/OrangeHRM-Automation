@@ -1,10 +1,27 @@
 export class changePassword {
+  /* ⇓ locators */
   profileMenu = () => cy.get(".oxd-userdropdown-tab");
   changePassLink = () => cy.contains("[role=menuitem]", "Change Password");
 
   currentPassField = () => cy.xpath("(//input[@type='password'])[1]");
   newPassField = () => cy.xpath("(//input[@type='password'])[2]");
   confirmPassField = () => cy.xpath("(//input[@type='password'])[3]");
+
+  saveBtn = () => cy.get("button[type='submit']");
+
+  currentPassFieldErr = (errMsg) =>
+    this.confirmPassField()
+      .parents()
+      .eq(1)
+      .contains("span", errMsg)
+      .should("exist");
+
+  newPassFieldErr = (errMsg) =>
+    this.confirmPassField()
+      .parents()
+      .eq(1)
+      .contains("span", errMsg)
+      .should("exist");
 
   confirmPassFieldErr = (errMsg) =>
     this.confirmPassField()
@@ -13,9 +30,7 @@ export class changePassword {
       .contains("span", errMsg)
       .should("exist");
 
-  saveBtn = () => cy.get("button[type='submit']");
-
-  // actions
+  /* ⇓ actions */
   changePassPage() {
     this.profileMenu().click();
     this.changePassLink().should("be.visible").click();
@@ -31,9 +46,13 @@ export class changePassword {
     this.saveBtn().contains("Save").click();
   }
 
-  /* assertions */
+  /* ⇓ assertions */
   verifyChangePassPage() {
     cy.url().should("include", "updatePassword");
+  }
+
+  verifyChangePassSuccess(successMsg) {
+    cy.get(".oxd-toast").contains(successMsg).should("exist");
   }
 
   verifyPasswordMatch(errMsg) {
@@ -44,9 +63,7 @@ export class changePassword {
           .invoke("val")
           .then((confirmPass) => {
             // check if password doesn't matched
-            if (newPass !== confirmPass) {
-              this.confirmPassFieldErr(errMsg);
-            }
+            if (newPass !== confirmPass) this.confirmPassFieldErr(errMsg);
           });
       });
   }
@@ -56,73 +73,35 @@ export class changePassword {
     this.currentPassField()
       .invoke("val")
       .then((value) => {
-        if (value === "") {
-          this.currentPassField()
-            .parents()
-            .eq(1)
-            .contains("span", errMsg)
-            .should("exist");
-        }
+        if (value === "") this.currentPassFieldErr(errMsg);
       });
 
     // check if new password field blank
     this.newPassField()
       .invoke("val")
       .then((value) => {
-        if (value === "") {
-          this.newPassField()
-            .parents()
-            .eq(1)
-            .contains("span", errMsg)
-            .should("exist");
-        }
+        if (value === "") this.newPassFieldErr(errMsg);
       });
 
     // check if confirm password field blank
     this.confirmPassField()
       .invoke("val")
       .then((value) => {
-        if (value === "") {
-          this.confirmPassField()
-            .parents()
-            .eq(1)
-            .contains("span", confirmErrMsg)
-            .should("exist");
-        }
+        if (value === "") this.confirmPassFieldErr(confirmErrMsg);
       });
   }
 
-  // check if new password matched criteria
+  // validate new password criteria
   validatePass(errMsg) {
-    // check if new password length >= 7
     this.newPassField()
       .invoke("val")
       .then((value) => {
-        if (value.length >= 7) {
-          this.newPassField()
-            .parents()
-            .eq(1)
-            .contains("span", errMsg)
-            .should("exist");
-        }
-
+        // check if new password length >= 7
+        if (value.length >= 7) this.newPassFieldErr(errMsg);
         // check if password not contain at-least 1 number
-        else if (!/(?=.*\d)/.test(value)) {
-          this.newPassField()
-            .parents()
-            .eq(1)
-            .contains("span", errMsg)
-            .should("exist");
-        }
-
+        else if (!/(?=.*\d)/.test(value)) this.newPassFieldErr(errMsg);
         // check if password not contain at-least 1 char
-        else if (!/(?=.*[a-zA-Z])/.test(value)) {
-          this.newPassField()
-            .parents()
-            .eq(1)
-            .contains("span", errMsg)
-            .should("exist");
-        }
+        else if (!/(?=.*[a-zA-Z])/.test(value)) this.newPassFieldErr(errMsg);
       });
   }
 }

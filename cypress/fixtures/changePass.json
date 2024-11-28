@@ -15,5 +15,7 @@
     "passCriteriaforNum": "Your password must contain minimum 1 number",
     "passCriteriaforChar": "Your password must contain minimum 1 lower-case letter",
     "confirmPass": "Passwords do not match"
-  }
+  },
+
+  "changePassSuccessMsg": "Successfully Saved"
 }
